@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css'; // For icons
 
@@ -12,7 +12,18 @@ const Navbar = ({ cartCount, onSearch }) => {
   const handleSearchClick = () => {
     onSearch(searchTerm);  // Pass the search term to the parent
   };
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleSearchClick();
+    }
+  };
 
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [searchTerm]); 
   const handleHomeClick = () => {
     setSearchTerm('');     // Clear the search term when navigating to Home
     onSearch('');          // Notify parent to clear search and show all products
